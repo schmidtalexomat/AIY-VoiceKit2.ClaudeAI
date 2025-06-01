@@ -167,28 +167,13 @@ PYTHON_PATH = os.path.join(script_dir, "AIY-projects-python/src")
 ├── audio_system.py         # Audio recording and TTS
 ├── voice_recognition.py    # Speech recognition
 ├── claude_client.py        # Claude AI integration
-├── config.py              # Configuration
-├── key                    # Claude API key (create this)
-├── AIY-projects-python/   # AIY Python libraries (copy here)
+├── config.py               # Configuration
+├── key                     # Claude API key (create this)
+├── AIY-projects-python/    # AIY Python libraries (copy here)
 └── scripts/
-    └── install.sh   # Installation script    
-    └── test_hardware.py   # Hardware test script
+    └── install.sh          # Installation script    
+    └── test_hardware.py    # Hardware test script
     
-```
-
-## Troubleshooting
-
-### Audio Issues
-```bash
-# Check ALSA cards
-cat /proc/asound/cards
-
-# Check AIY services
-sudo systemctl status aiy_voice_classic.service
-sudo systemctl status aiy_io_permission.service
-
-# Restart audio
-pulseaudio --kill && pulseaudio --start
 ```
 
 ## Contributing
