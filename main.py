@@ -32,69 +32,67 @@ class VoiceRecorder:
         
         # Status
         self.running = True
-        self.led_blink_active = False
+        self.blink_active = False
         
-        # Ready - dimmed green
-        self.set_ready_led()
+        # Ready - solid dim green
+        self.leds.update(Leds.rgb_on((0, 10, 0)))
         self.audio.speak_text("yo")
 
-    def set_ready_led(self):
-        """Set dimmed green LED for ready state"""
-        # Dimmed green (RGB values 0-255)
-        self.leds.update(Leds.rgb_on((0, 10, 0)))
-
-    def blink_led(self, color, duration=0.5, cycles=3):
-        """Blink LED with specified color"""
-        self.led_blink_active = True
-        for _ in range(cycles):
-            if not self.led_blink_active:
-                break
+    def blink_during_phase(self, color):
+        """Start blinking for entire phase"""
+        self.blink_active = True
+        while self.blink_active:
             self.leds.update(Leds.rgb_on(color))
-            time.sleep(duration / 2)
+            time.sleep(0.3)
+            if not self.blink_active:
+                break
             self.leds.update(Leds.rgb_off())
-            time.sleep(duration / 2)
-        self.led_blink_active = False
+            time.sleep(0.3)
+
+    def stop_blinking(self):
+        """Stop blinking"""
+        self.blink_active = False
 
     def button_pressed(self):
         if not self.audio.recording:
             print("rec start")
-            # Red blinking during recording
-            threading.Thread(target=self.blink_led, args=(Color.RED, 0.3, 999), daemon=True).start()
+            # Start red blinking for entire recording phase
+            threading.Thread(target=self.blink_during_phase, args=((30, 0, 0),), daemon=True).start()
             self.audio.start_recording()
             threading.Thread(target=self.handle_recording, daemon=True).start()
 
     def button_released(self):
         if self.audio.recording:
             print("rec stop")
-            self.led_blink_active = False  # Stop red blinking
             self.audio.stop_recording()
 
     def handle_recording(self):
         try:
-            # Record
+            # Record (red blinking continues from button_pressed)
             self.audio.record_audio(config.TEMP_AUDIO_FILE)
             
-            # Speech recognition - purple blinking
-            threading.Thread(target=self.blink_led, args=(Color.PURPLE, 0.4, 5), daemon=True).start()
+            # Switch to purple blinking for speech recognition
+            self.stop_blinking()
+            time.sleep(0.1)
+            threading.Thread(target=self.blink_during_phase, args=((30, 0, 30),), daemon=True).start()
             print("processing speech...")
             text = self.speech.recognize_audio_file(config.TEMP_AUDIO_FILE)
             
             if text:
-                # Blue blinking while Claude thinks
-                self.led_blink_active = False  # Stop purple blinking
-                time.sleep(0.2)  # Brief pause
-                threading.Thread(target=self.blink_led, args=(Color.BLUE, 0.6, 999), daemon=True).start()
-                
+                # Switch to blue blinking for Claude
+                self.stop_blinking()
+                time.sleep(0.1)
+                threading.Thread(target=self.blink_during_phase, args=((0, 0, 30),), daemon=True).start()
                 answer = self.claude.ask_claude(text)
                 
-                # Stop blue blinking before speaking
-                self.led_blink_active = False
-                time.sleep(0.2)
+                # Stop blinking before speaking
+                self.stop_blinking()
                 
                 # Speak Claude's answer
                 self.audio.speak_text(answer)
             else:
                 print("no speech recognized")
+                self.stop_blinking()
                 self.audio.speak_text("not understood")
             
             # Cleanup
@@ -104,10 +102,10 @@ class VoiceRecorder:
         except Exception as e:
             print(f"recording error: {e}")
         finally:
-            # Stop any blinking and back to ready
-            self.led_blink_active = False
-            time.sleep(0.3)
-            self.set_ready_led()
+            # Back to ready - solid dim green
+            self.stop_blinking()
+            time.sleep(0.2)
+            self.leds.update(Leds.rgb_on((0, 10, 0)))
 
     def run(self):
         try:
@@ -117,6 +115,7 @@ class VoiceRecorder:
         except KeyboardInterrupt:
             print("stopping...")
         finally:
+            self.stop_blinking()
             self.leds.update(Leds.rgb_off())
 
 def main():
