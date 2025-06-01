@@ -104,7 +104,7 @@ git clone https://github.com/schmidtalexomat/AIY-VoiceKit2.ClaudeAI
 cd AIY-V*
 
 # Copy your AIY-projects-python directory here
-# cp -r /path/to/AIY-projects-python .
+cp -r /path/to/AIY-projects-python .
 
 # Create API key file
 echo "your-claude-api-key-here" > key
@@ -118,14 +118,14 @@ amixer sset 'Master' 70%
 amixer sset 'Capture' 70%
 
 # Test audio (requires AIY-projects-python)
-export PYTHONPATH="~/AIY-VoiceKit2.ClaudeAI/AIY-projects-python/src:$PYTHONPATH"
+export PYTHONPATH="~/whatever/AIY-projects-python/src:$PYTHONPATH"
 python3 AIY-projects-python/checkpoints/check_audio.py
 ```
 
 ## Usage
 
 ```bash
-# Start assistant
+# Start assistant inside your AIY-dir
 python3 main.py
 
 # Run in background with logging
