@@ -13,9 +13,9 @@ A voice assistant built on Google AIY VoiceKit 2 hardware with Claude AI integra
 ## Hardware Requirements
 
 - Google AIY VoiceKit 2 (Voice Bonnet)
-- Raspberry Pi 3/4
-- MicroSD card (minimum 16GB)
 - Kit components (microphone, speaker, button, LED)
+- Raspberry Pi Zero WH
+- MicroSD card (minimum 8 GB)
 
 ## Important Prerequisites
 
@@ -37,10 +37,9 @@ A voice assistant built on Google AIY VoiceKit 2 hardware with Claude AI integra
 - AIY Python modules from `AIY-projects-python/src`
 
 ### Obtaining Components:
-1. Download official AIY Voice Kit image (2019/2020) from Google
-2. Extract .deb packages using `dpkg-repack` or mount image
+1. Download official AIY Voice Kit image (2021)
+2. Extract .deb packages using `dpkg-repack`
 3. Copy `AIY-projects-python` directory
-4. Alternative: Search community archives (verify licensing)
 
 ## Installation
 
@@ -67,7 +66,7 @@ sudo apt install mbrola-de6
 ### Step 4: AIY Drivers (Manual Installation Required)
 
 ```bash
-# Extract your AIY packages to a directory, then:
+# Copy your AIY packages to a directory, then:
 sudo dpkg -i aiy-dkms_2.0-1_all.deb
 sudo dpkg -i aiy-overlay-voice_1.0-1_all.deb
 sudo dpkg -i aiy-voicebonnet-soundcard-dkms_3.0-1_all.deb
@@ -101,8 +100,8 @@ sudo reboot
 ### Step 7: Project Installation
 
 ```bash
-git clone https://github.com/[USERNAME]/aiy-claude-assistant.git
-cd aiy-claude-assistant
+git clone https://github.com/schmidtalexomat/AIY-VoiceKit2.ClaudeAI
+cd AIY-V*
 
 # Copy your AIY-projects-python directory here
 # cp -r /path/to/AIY-projects-python .
@@ -119,7 +118,7 @@ amixer sset 'Master' 70%
 amixer sset 'Capture' 70%
 
 # Test audio (requires AIY-projects-python)
-export PYTHONPATH="~/aiy-claude-assistant/AIY-projects-python/src:$PYTHONPATH"
+export PYTHONPATH="~/AIY-VoiceKit2.ClaudeAI/AIY-projects-python/src:$PYTHONPATH"
 python3 AIY-projects-python/checkpoints/check_audio.py
 ```
 
