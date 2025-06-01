@@ -33,16 +33,11 @@ class ClaudeClient:
                 self.conversation_history = self.conversation_history[2:]
             
             # Build messages with system prompt
-            messages = [{
-                "role": "system",
-                "content": "Answer briefly and precisely in German. Use simple text without markdown formatting."
-            }]
-            messages.extend(self.conversation_history)
-            
             payload = {
-                "model": config.CLAUDE_MODEL,
-                "max_tokens": config.CLAUDE_MAX_TOKENS,
-                "messages": messages
+            "model": config.CLAUDE_MODEL,
+            "max_tokens": config.CLAUDE_MAX_TOKENS,
+            "system": "Answer briefly and precisely in German. Use simple text without markdown formatting.",
+            "messages": self.conversation_history
             }
             
             response = requests.post(
