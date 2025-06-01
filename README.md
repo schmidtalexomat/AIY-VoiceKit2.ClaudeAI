@@ -190,22 +190,6 @@ sudo systemctl status aiy_io_permission.service
 pulseaudio --kill && pulseaudio --start
 ```
 
-### Hardware Not Recognized
-```bash
-# Check kernel modules
-lsmod | grep -E "(aiy|ktd202x|pwm_soft)"
-
-# Check device tree overlays
-sudo dtoverlay -l
-```
-
-### Permission Issues
-```bash
-# Add user to audio group
-sudo usermod -a -G audio $USER
-# Logout and login again
-```
-
 ## Contributing
 
 Contributions welcome, especially:
