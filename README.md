@@ -172,7 +172,9 @@ PYTHON_PATH = os.path.join(script_dir, "AIY-projects-python/src")
 ├── key                    # Claude API key (create this)
 ├── AIY-projects-python/   # AIY Python libraries (copy here)
 └── scripts/
+    └── install.sh   # Installation script    
     └── test_hardware.py   # Hardware test script
+    
 ```
 
 ## Troubleshooting
