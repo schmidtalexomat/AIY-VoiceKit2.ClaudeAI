@@ -23,7 +23,7 @@ A voice assistant built on Google AIY VoiceKit 2 hardware with Claude AI integra
 
 ### Required Google Components (not included in this repository):
 
-**Driver Packages (.deb files):**
+**Driver Packages and pico2wave:**
 - `aiy-dkms_2.0-1_all.deb`
 - `aiy-overlay-voice_1.0-1_all.deb`
 - `aiy-voicebonnet-soundcard-dkms_3.0-1_all.deb`
@@ -32,6 +32,9 @@ A voice assistant built on Google AIY VoiceKit 2 hardware with Claude AI integra
 - `aiy-python-wheels_1.4-1_all.deb`
 - `leds-ktd202x-dkms_1.2-1_all.deb`
 - `pwm-soft-dkms_2.0-1_all.deb`
+- `libttspico0_1.0+git20130326-3+rpi1_armhf.deb`
+- `libttspico-utils_1.0+git20130326-3+rpi1_armhf.deb`
+- `libttspico-data_1.0+git20130326-9_all.deb`
 
 **Python Libraries:**
 - AIY Python modules from `AIY-projects-python/src`
@@ -55,15 +58,7 @@ sudo apt install -y dkms raspberrypi-linux-headers python3-pip pulseaudio flac e
 sudo pip3 install inotify SpeechRecognition requests
 ```
 
-### Step 3: German Voice (Optional)
-
-```bash
-wget https://raspberry-pi.fr/download/espeak/mbrola3.0.1h_armhf.deb -O mbrola.deb
-sudo dpkg -i mbrola.deb
-sudo apt install mbrola-de6
-```
-
-### Step 4: AIY Drivers (Manual Installation Required)
+### Step 3: AIY Drivers + pico2wave (Manual Installation Required)
 
 ```bash
 # Copy your AIY packages to a directory, then:
@@ -75,9 +70,12 @@ sudo dpkg -i aiy-voice-services_1.1-1_all.deb
 sudo dpkg -i aiy-python-wheels_1.4-1_all.deb
 sudo dpkg -i leds-ktd202x-dkms_1.2-1_all.deb
 sudo dpkg -i pwm-soft-dkms_2.0-1_all.deb
+sudo dpkg -i libttspico0_1.0+git20130326-3+rpi1_armhf.deb
+sudo dpkg -i libttspico-data_1.0+git20130326-9_all.deb  
+sudo dpkg -i libttspico-utils_1.0+git20130326-3+rpi1_armhf.deb
 ```
 
-### Step 5: System Configuration
+### Step 4: System Configuration
 
 ```bash
 echo "gpu_mem=128" | sudo tee -a /boot/config.txt
@@ -87,7 +85,7 @@ sudo mkdir -p /etc/pulse/daemon.conf.d/
 echo "default-sample-rate = 48000" | sudo tee /etc/pulse/daemon.conf.d/aiy.conf
 ```
 
-### Step 6: Enable Services
+### Step 5: Enable Services
 
 ```bash
 sudo systemctl enable aiy_io_permission.service
