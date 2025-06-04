@@ -54,7 +54,7 @@ Install Raspberry Pi OS Lite (tested with 2023-05 Buster) and assemble AIY hardw
 
 ```bash
 sudo apt update && sudo apt upgrade
-sudo apt install -y dkms raspberrypi-linux-headers python3-pip pulseaudio flac espeak espeak-data
+sudo apt install -y dkms raspberrypi-linux-headers python3-pip pulseaudio flac
 sudo pip3 install inotify SpeechRecognition requests
 ```
 
