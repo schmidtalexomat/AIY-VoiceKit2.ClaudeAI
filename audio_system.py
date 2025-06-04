@@ -6,7 +6,7 @@ import config
 # AIY Audio imports
 import sys
 sys.path.insert(0, config.PYTHON_PATH)
-from aiy.voice.audio import AudioFormat, record_file
+from aiy.voice.audio import AudioFormat, record_file, FilePlayer
 
 class AudioSystem:
     def __init__(self):
@@ -18,7 +18,7 @@ class AudioSystem:
         )
         
     def record_audio(self, output_file):
-        """Record audio with AIY system"""
+
         try:
             print("starting AIY recording...")
             
@@ -42,17 +42,22 @@ class AudioSystem:
         except Exception as e:
             print(f"audio recording error: {e}")
             return False
-    
+
     def speak_text(self, text):
-        """Text-to-speech with improved espeak parameters"""
         try:
-            # Better German voice parameters
-            subprocess.run(['espeak', '-v', 'mb-de6', '-s', '130', text])
+            
+            data = "<volume level='60'><pitch level='130'><speed level='100'>%s</speed></pitch></volume>" % text
+            subprocess.run(['pico2wave', '-w', '/tmp/tts.wav', '-l', 'de-DE', data])
+            player = FilePlayer()
+            player.play_wav('/tmp/tts.wav', device='default')
+            player.join()
+            os.unlink('/tmp/tts.wav')
             return True
+            
         except Exception as e:
             print(f"TTS error: {e}")
             return False
-    
+             
     def start_recording(self):
         """Start recording mode"""
         self.recording = True
